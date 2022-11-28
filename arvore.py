@@ -12,26 +12,27 @@ class ArvoreNode:
 
 
 class ArvoreBinaria:
-    def __init__(self, data=None):
-        if data:
+    def __init__(self, data=None, node=None):
+        if node:
+            self.root = node
+        elif data:
             node = ArvoreNode(data)
             self.root = node
         else:
             self.root = None
     
-    
-    def simetric_traversal(self, node=None):
+## TRAVESSIA IN-ORDEM
+    def inorder_traversal(self, node=None):
         if node is None:
             node = self.root
         if node.left:
-            print('(', end='')
-            self.simetric_traversal(node.left)
-        print(node, end='')
+            self.inorder_traversal(node.left)
+        print(node, end=' ')
         if node.right:
-            self.simetric_traversal(node.right)
-            print(')', end='')
+            self.inorder_traversal(node.right)
 
 
+## TRAVESSIA PÓS-ORDEM
     def postorder_traversal(self, node=None):
         if node is None:
             node = self.root
@@ -40,7 +41,8 @@ class ArvoreBinaria:
         if node.right:
             self.postorder_traversal(node.right)
         print(node)
-    
+
+
     def height(self, node=None):
         if node is None:
             node = self.root
@@ -54,7 +56,44 @@ class ArvoreBinaria:
             return hright + 1
         return hleft + 1
 
+class BinarySearchTree(ArvoreBinaria):
+    def insert(self, value):
+        parent = None
+        x = self.root
+        while(x):
+            parent = x
+            if value < x.data:
+                x = x.left
+            else:
+                x = x.right
+        if parent is None:
+            self.root = ArvoreNode(value)
+        elif value < parent.data:
+            parent.left = ArvoreNode(value)
+        else:
+            parent.right = ArvoreNode(value)
+    
+    def search(self, value):
+        return self._search(value, self.root)
 
+    def _search(self, value, node):
+        if node is None:
+            return node
+        if node.data == value:
+            return BinarySearchTree(node)
+        if value < node.data:
+            return self._search(value, node.left)
+        return self._search(value, node.right)
+
+    
+    # def search(self, value, node = 0):
+    #     if node == 0:
+    #         node = self.root
+    #     if node is None or node.data == value:
+    #         return BinarySearchTree(node)
+    #     if value < node.data:
+    #         return self.search(value, node.left)
+    #     return self.search(value, node.right)
 
 if __name__ == "__main__":
     # arvore = ArvoreBinaria(7)
